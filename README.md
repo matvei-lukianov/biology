@@ -23,7 +23,7 @@ To accelerate the sampling of dense biological fluid systems (Protein Packing) u
 ### 3.1 Energy Convergence
 Comparison of **Baseline (Local MCMC)** vs **Hybrid (Flow + MCMC)** on the 1440-molecule system.
 
-![Energy Comparison](energy_comparison_final.png)
+![Energy Comparison](plot_energy.png)
 
 - **Baseline (Blue)**: consistently descends to lower energies (**-566**). It efficiently navigates the "Funnel" landscape.
 - **Hybrid (Red)**: fluctuates around higher energies (**-460**).
@@ -77,10 +77,11 @@ Detailed metrics for the runs:
              1. Sample random neighbor $LL$ for $L$. If none, remove $L$ from $B$, continue.
              2. Sample random match $k$ (docking configuration) between $L$ and $LL$.
              3. Form putative state $x'_L$ using match $k$.
-             4. **Validate** move length: If $\sum \|x'_L - x_L\| > d_{max}$, reject.
+             4. **Validate** move length: If `sum(|x'_L - x_L|) > d_max`, reject.
              5. **Check Collision**: If hard sphere overlap, reject.
              6. **Metropolis Balance**:
-                Calculate $p = \min(1, \exp(-\frac{E_{after} - E_{before}}{T}) \frac{N_{after}}{N_{before}})$.
+                Calculate `p = min(1, exp(-(E_after - E_before)/T) * (N_after / N_before))`
+
                 With probability $p$, accept:
                   - Detach $L$ from old neighbors ($e \leftarrow e - e_{old}$).
                   - Attach $L$ to $LL$ ($e \leftarrow e + e_{match}^k$).
