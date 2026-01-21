@@ -19,7 +19,7 @@ To accelerate the sampling of dense biological fluid systems (Protein Packing) u
 ### 3.1 Energy Convergence
 Comparison of **Baseline (Local MCMC)** vs **Hybrid (Flow + MCMC)** on the 1440-molecule system.
 
-![Energy Comparison](/home/matvey/.gemini/antigravity/brain/5f0e6a69-469d-4992-922b-bc200940d00b/energy_comparison_final.png)
+![Energy Comparison](energy_comparison_final.png)
 
 - **Baseline (Blue)**: consistently descends to lower energies (**-566**). It efficiently navigates the "Funnel" landscape.
 - **Hybrid (Red)**: fluctuates around higher energies (**-460**).
