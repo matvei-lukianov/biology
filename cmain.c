@@ -15,12 +15,12 @@ int main(void)
 
 //------------------------------------------- Initialize log, stats, parameters
       fflog=fopen("gcell.log","w"); 
-      fstat=fopen("gcell.st", "w"); 
+      fp_stat=fopen("gcell.st", "w"); 
       fclst=fopen("clust.st", "w");
       fdrot=fopen("d_rot.st", "w");
 //-----------------------------------------------------------------------------
 
       coper(); if(ier1||ier2)return 0;
       
-      fclose(fflog); fclose(fstat); fclose(fclst); fclose(fdrot);
+      fclose(fflog); fclose(fp_stat); fclose(fclst); fclose(fdrot);
 }

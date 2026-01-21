@@ -11,11 +11,14 @@
 extern float E[],sh[],Xp0[],Yp0[],Zp0[],Xs0[],Ys0[],Zs0[];
 extern float X[][DIMA+1],Y[][DIMA+1],Z[][DIMA+1];
 extern int   mnum[],ncop[];
-extern int   nmol,stat,wst,refst,clus,ndr,pp,Nac;
-extern FILE  *fstat,*fdrot;
+extern int   nmol,stat_flag,wst,refst,clus,ndr,pp,Nac;
+extern FILE  *fp_stat,*fdrot;
 
 static float Eaw[DIMW+2],Saw[DIMW+2],MSDw[DIMW+2],RMSDw[DIMW+2],Nartw[DIMW+2];
 static int   tg,nclu;
+
+// Globals for Interface
+float LastEavg=0., LastSavg=0., LastAccAvg=0., LastMSDavg=0.;
 
 void cclus(int);
 
@@ -24,15 +27,15 @@ void cstat(int nst,int nso,int nsw)
 float Ea,sl,Sa,MSD,RMSD,Nart,Eawa,Sawa,MSDwa,RMSDwa,Nartwa,dx,dy,dz;
 int   l,i,ncl;
 
-//-------- Output data for rotational diffusion (supresses stat & clust output)      
+//-------- Output data for rotational diffusion (supresses stat_flag & clust output)      
       if (ndr)
         {
-         if (nst==stat) fprintf(fdrot,"Step     Protein/vector XYZ(o)-XYZ(v)");
-         if (nso==stat) fprintf(fdrot,"\n%5d ",nst);
+         if (nst==stat_flag) fprintf(fdrot,"Step     Protein/vector XYZ(o)-XYZ(v)");
+         if (nso==stat_flag) fprintf(fdrot,"\n%5d ",nst);
          i=1;
          for (l=1; l<=nmol; l++)
            {              
-            if ((mnum[l]==pp)&&(nso==stat))
+            if ((mnum[l]==pp)&&(nso==stat_flag))
               {
                fprintf(fdrot,"| %3.0f %3.0f %3.0f - %3.0f %3.0f %3.0f ",
                               X[l][0],Y[l][0],Z[l][0],X[l][1],Y[l][1],Z[l][1]);
@@ -44,9 +47,9 @@ int   l,i,ncl;
 //-----------------------------------------------------------------------------
       Ea=Sa=MSD=0.; Eawa=Sawa=MSDwa=RMSDwa=Nartwa=0.; 
 
-      if(nst==stat){fprintf(fstat,  "----------------------------------------");
-                    fprintf(fstat,"\n Step    E    Shift Nacc     MSD    RMSD");
-                    fprintf(fstat,"\n----------------------------------------");} 
+      if(nst==stat_flag){fprintf(fp_stat,  "----------------------------------------");
+                    fprintf(fp_stat,"\n Step    E    Shift Nacc     MSD    RMSD");
+                    fprintf(fp_stat,"\n----------------------------------------");} 
 
       if (nst==refst) tg=0;
       for (l=1; l<=nmol; l++) 
@@ -79,14 +82,28 @@ int   l,i,ncl;
       Eawa  /=(float)wst;Sawa/=(float)wst;MSDwa/=(float)wst;RMSDwa/=(float)wst;
       Nartwa/=(float)wst;
 
-      if ((nso==stat)&&(nst>=wst))
-        fprintf(fstat,"\n%5d %6.2f %5.2f %5.2f %8.0f %6.0f",
+      if ((nso==stat_flag)&&(nst>=wst))
+        fprintf(fp_stat,"\n%5d %6.2f %5.2f %5.2f %8.0f %6.0f",
                          nst,Eawa, Sawa, Nartwa,MSDwa,RMSDwa);
       
-      if (nso==stat)                                        // Cluster data out
+      // Store for Python interface
+      LastEavg = Eawa;
+      LastSavg = Sawa;
+      LastAccAvg = Nartwa;
+      LastMSDavg = MSDwa;
+      
+      if (nso==stat_flag)                                        // Cluster data out
         {
-         if (nst==stat) nclu=0; 
-         nclu++; ncl=nclu*stat;
+         if (nst==stat_flag) nclu=0; 
+         nclu++; ncl=nclu*stat_flag;
          if (ncl==clus) { cclus(nst); nclu=0; }
         }
+ }
+
+ // Getter for Python
+ void get_latest_stats(float* out_stats) {
+     out_stats[0] = LastEavg;
+     out_stats[1] = LastSavg;
+     out_stats[2] = LastAccAvg;
+     out_stats[3] = LastMSDavg;
  }

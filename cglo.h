@@ -40,7 +40,7 @@ nmol                    number of all molecules
 mtch                    number of matches in complex
 nstep                   number of steps in trajectory
 nout                    coordinates output increment
-stat                    statistics  output increment
+stat_flag                    statistics  output increment
 wst                     window for statistics averaging
 repr                    all/c-alpha
 pbc                     periodic boundary condition switch
@@ -79,10 +79,10 @@ int   mnum[DIMM+2];
 int   nat[DIMN+2];
 int   Cn[DIMM+2][DIMM+1],Cm[DIMM+2][DIMM+1];
 int   atnum[DIMN+2][DIMA+1],rsnum[DIMN+2][DIMA+1];
-int   nml,mov,nmol,mtch,nstep,nout,repr,mcol,rlig,stat,wst,pbc,bal,refst,clus;
+int   nml,mov,nmol,mtch,nstep,nout,repr,mcol,rlig,stat_flag,wst,pbc,bal,refst,clus;
 int   ndr,pp,cellt,Nac,scren;
 int   ier1,ier2;
 char  mnam[DIMN+2][5];
 char  atnam[DIMN+2][DIMA+1][4],rsnam[DIMN+2][DIMA+1][4];
 char  atnamo[DIMA+2][4],rsnamo[DIMA+2][4];
-FILE  *fopen(),*fin,*finn,*finm,*fflog,*fout,*fstat,*fclst,*fdrot;
+FILE  *fopen(),*fin,*finn,*finm,*fflog,*fout,*fp_stat,*fclst,*fdrot;

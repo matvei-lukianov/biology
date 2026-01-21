@@ -15,7 +15,7 @@ extern float Xp0[],Yp0[],Zp0[];
 extern float mrad[];
 extern int   ncop[],nat[],mnum[];
 extern int   atnum[][DIMA+1],rsnum[][DIMA+1];
-extern int   cellt,nml,mov,nmol,nstep,nout,stat,wst,scren,ier1,ier2;
+extern int   cellt,nml,mov,nmol,nstep,nout,stat_flag,wst,scren,ier1,ier2;
 extern char  mnam[][5];
 extern char  atnam[][DIMA+1][4],rsnam[][DIMA+1][4],atnamo[][4],rsnamo[][4];
 
@@ -99,7 +99,7 @@ printf("\n[coper] nat[%d]=%d",i,nat[i]);
          
          ns1++; if (ns1==scren) {printf("\n----------\nSTEP %2d ",nst); ns1=0;}
          nco++; if (nco==nout) { ccout(nst); nco=0; }        // Coordinates out
-         nso++;nsw++; cstat(nst,nso,nsw); if(nso==stat) nso=0;    // Stats  out
+         nso++;nsw++; cstat(nst,nso,nsw); if(nso==stat_flag) nso=0;    // Stats  out
                                           if(nsw== wst) nsw=0;
         }
 }
